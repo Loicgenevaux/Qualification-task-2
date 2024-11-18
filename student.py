@@ -1,63 +1,105 @@
-class TUstudent :
-    """
-    Class student from TU Darmstadt
-    """
-    def __init__(self, name, age, registration_date, 
-                 study_program, matricule_number,accomplished_courses
-                 , favourite_courses):
-        self.name=name
-        self.age=age
-        self.registration_date=registration_date
-        self.study_program=study_program
-        self.matricule_number=matricule_number
-        self.accomplished_courses=accomplished_courses
-        self.favourite_courses=favourite_courses
+class Date :
+    def __init__(self,date_str):
+        self._date_str = date_str
+        self._year = None
+        self._month = None
+        self._day = None
+        self.test_date(date_str)
 
-    @property
-    def get_name(self):
-        return self.name
-    @property
-    def get_age(self):
-        return self.age
-    @property
-    def get_registration_date(self):
-        return self.registration_date
-    @property
-    def get_study_program(self):
-        return self.study_program
-    @property
-    def get_matricule_number(self):
-        return self.matricule_number
+    def test_date (self, date_str):
+        try:
+            number = date_str.split("-")
+            if len(number) != 3:
+                raise ValueError("Date should look like : 'YYYY-MM-DD'.")
+            self._day = int(number[0])
+            self._month = int(number[1])
+            self._year = int(number[2])
+
+            if not (1 <= self._month <= 12):
+                raise ValueError("month should be between 1 and 12.")
+            if not (1 <= self._day <= 31):
+                raise ValueError("Days should be between 1 et 31.")
+        except ValueError as file:
+            raise ValueError(f"Error on date : {file}")
     
-    # Import des bibliothèques nécessaires
-from datetime import date
+    def get_day(self):
+        return self._day
 
+    def get_month(self):
+        return self._month
 
-# Création d'un étudiant en Robust Data Science
-print("\nCréation d'un étudiant en Robust Data Science...")
-rds_student = RobustDataScienceStudent(
-    name="Bob Robust",
-    age=25,
-    registration_date="2020-09-01",
-    study_program="Robust Data Science",
-    registration_number=456789
-)
+    def get_year(self):
+        return self._year
 
-# Test des getters
-print("\nInformations de l'étudiant Robust Data Science :")
-print("Nom :", rds_student.get_name())
-print("Âge :", rds_student.get_age())
-print("Date d'inscription :", rds_student.get_registration_date())
-print("Programme d'études :", rds_student.get_study_program())
-print("Numéro d'inscription :", rds_student.get_registration_number())
+    def __str__(self):
+        return f"{self._day}-{self._month}-{self._year}"
 
-# Ajout de cours accomplis et d'un cours préféré
-print("\nAjout de cours accomplis et d'un cours préféré pour Bob...")
-rds_student.set_courses(["Programming", "Statistics", "AI", "Robotics", "Ethics"])
-rds_student.set_favorite_course("Robotics")
+class Human ():
 
-print("Cours accomplis :", rds_student.get_courses())
-print("Cours préféré :", rds_student.get_favorite_course())
+    def __init__(self, name, age):
+        if not name:
+            raise ValueError("Missing name")
+        self._name=name
 
+        if age <0:
+            raise ValueError("Age is not negative")
+        self._age=age
 
+    def get_name(self):
+        return self._name
 
+    def get_age(self):
+        return self._age
+    
+    def __str__(self):
+        return f"Name: {self._name}\nAge: {self._age}"
+
+class TUstudent (Human):
+    def __init__(self, name,age, date_str,study_program, matricule):
+        
+        tu_programs=[
+            "Aerospace Engineering","Angewandte Linguistik","Architektur","Energy Science and Engineering","Elektrotechnik und Informationstechnik"
+        ]
+
+        super().__init__(name, age)
+        self._date = Date(date_str)
+        
+        if study_program not in tu_programs:
+            raise ValueError("study program invalid")
+        self._study_program=study_program
+        if not isinstance(matricule, int) or len(str(matricule)) != 7:
+            raise ValueError("Matriculation number must be 7-digit.")
+        self._matricule=matricule
+    
+    def get_name(self):
+        return self._name
+
+    def get_age(self):
+        return self._age
+    
+    def get_date(self):
+        return self._date
+
+    def get_study_program(self):
+        return self._study_program
+
+    def get_matricule(self):
+        return self._matricule
+    
+
+    def __str__(self):
+        return f"Name: {self._name}\nAge: {self._age}\nDate: {super().__str__()}\nStudy program: {self._study_program}\nMatricule number: {self._matricule}"
+
+def main():
+    s1=TUstudent("David Dupond",21,"11-11-2011","Elektrotechnik und Informationstechnik",1234567)
+    print(s1)
+
+    print("\ngetters:")
+    print("Name:", s1.get_name())
+    print("Age:", s1.get_age())
+    print("Matricule:", s1.get_matricule())
+    print("Study program:", s1.get_study_program())
+    print("Date:", s1.get_date())
+
+if __name__=="__main__":
+    main() 
