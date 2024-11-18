@@ -55,7 +55,7 @@ class Human ():
         return f"Name: {self._name}\nAge: {self._age}"
 
 class TUstudent (Human):
-    def __init__(self, name,age, date_str,study_program, matricule):
+    def __init__(self, name,age, date_str,study_program, matricule,courses,fav_courses):
         
         tu_programs=[
             "Aerospace Engineering","Angewandte Linguistik","Architektur","Energy Science and Engineering","Elektrotechnik und Informationstechnik"
@@ -68,9 +68,17 @@ class TUstudent (Human):
             raise ValueError("study program invalid")
         self._study_program=study_program
         if not isinstance(matricule, int) or len(str(matricule)) != 7:
-            raise ValueError("Matriculation number must be 7-digit.")
+            raise ValueError("Matriculation number must be 7-digit")
         self._matricule=matricule
-    
+
+        if len(courses)!=5:
+            raise ValueError("Minumum courses accomplished number should be 5")
+        self.courses=courses
+
+        if fav_courses not in courses :
+            raise ValueError("Favorite courses have to be an accomplished courses")
+        self.fav_courses=fav_courses
+
     def get_name(self):
         return self._name
 
@@ -88,10 +96,10 @@ class TUstudent (Human):
     
 
     def __str__(self):
-        return f"Name: {self._name}\nAge: {self._age}\nDate: {super().__str__()}\nStudy program: {self._study_program}\nMatricule number: {self._matricule}"
+        return f"Name: {self._name}\nAge: {self._age}\nDate: {super().__str__()}\nStudy program: {self._study_program}\nMatricule number: {self._matricule}\nAccomplished courses: {self.courses}\nFavorite courses: {self.fav_courses}"
 
 def main():
-    s1=TUstudent("David Dupond",21,"11-11-2011","Elektrotechnik und Informationstechnik",1234567)
+    s1=TUstudent("David Dupond",21,"11-11-2011","Elektrotechnik und Informationstechnik",1234567,["e","m","p","t","h"],"e")
     print(s1)
 
     print("\ngetters:")
