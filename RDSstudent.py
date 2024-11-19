@@ -1,6 +1,7 @@
 import numpy as np
 from student import TUstudent
 import matplotlib.pyplot as plt
+from scipy import stats
 
 class RobustDataScienceStudent (TUstudent):
 
@@ -44,14 +45,76 @@ class RobustDataScienceStudent (TUstudent):
                 print(f"Standard deviation of y between x={xstat}: {std}")
                 print(f"Threshold y 70%: {threshold}")
                 print(f"dy/dx=0 for x={x[zeros]}")
-
+                return cls.y
         except Exception as error:
                 print(f"error when computing the function: {error}")
+                
+    @classmethod
+    def linear_algebra_compute(cls,matrix,vector):
+           try:
+                if not isinstance(matrix, np.ndarray) or not isinstance(vector, np.ndarray):
+                       raise TypeError("Matrix and Vector should be NumPy arrays.")
+                if matrix.shape[0] != matrix.shape[1]:
+                        raise ValueError("Matrix should have the same i and j.")
+                if matrix.shape[0] != vector.size:
+                        raise ValueError("The number of rows in matrix should be the size of vector.")
+                
+                x = np.linalg.solve(matrix, vector)
+
+                print("\nLinear System Solution:\n")
+                print(f"System Matrix:\n{matrix}\n")
+                print(f"Solution Vector:\n{vector}\n")
+                print(f"Solution:\n{x}\n")
+                return x
+           except Exception as error:
+                print(f"error when computing the function: {error}") 
+    @classmethod
+    def least_squares(cls,y,X,verbose=True):
+                try:
+                        if not isinstance(X, np.ndarray) or not isinstance(y, np.ndarray):
+                                raise TypeError("X and y should be NumPy arrays.")
+                        if X.shape[0] <= X.shape[1]:
+                               raise ValueError("The number of observations should always excess the number of variables")
+                        if y.shape[0] != X.shape[0]:
+                               raise ValueError("y should have the same number of observations as X.")
+                        beta, residual= np.linalg.lstsq(X, y, rcond=None)
+
+                        ym = X @ beta
+                        residual = y - ym
+                        
+                        n, k = X.shape  # n: nombre d'observations et k: variables (y compris l'intercept)
+                        residual_var = np.sum(residuals**2) / (n - k)
+                        
+                        XtX_inv = np.linalg.inv(X.T @ X)
+                        beta_std_errors = np.sqrt(np.diagonal(XTX_inv) * residual_var)
+                        
+                        t = beta / beta_std_errors
+                        p = 2 * (1 - stats.t.cdf(np.abs(t), df=n - k))
+
+                        if verbose :
+                               print("\nmultivariate least-squares linear regression solution:\n")
+                               print(f"Vector coefficient β:\n{beta}\n")
+                               print(f"Standard error of vector coefficient β:\n{beta_std_errors}\n")
+                               print(f"t satistical value:\n{t}\n")
+                               print(f"p satistical value:\n{p}\n")
+                        return beta, t, p
+                except Exception as error:
+                       print(f"error when computing the function: {error}")
+
+           
+           
 
 
 
-    
+x=[]
+y=[]   
 rdss1=RobustDataScienceStudent("David Dupond",21,"11-11-2011","Elektrotechnik und Informationstechnik",1234567,["e","m","p","t","h"],"e")
-rdss1.integral_compute([0,100],[4,7],plot_derivative=True)
+y=rdss1.integral_compute([0, 12], [4, 7], plot_derivative=True)
+A=np.array([[3,2,3,10],[2,-2,5,8],[3,3,4,9],[3,4,-3,-7]])
+b=np.array([4,1,3,2])
+X=rdss1.linear_algebra_compute(A,b)
+rdss1.least_squares(y,X,verbose=True)
+
+
 
 
