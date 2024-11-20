@@ -5,15 +5,15 @@ This Python module implements the RobustDataScienceStudent class, an extension o
 ## Features
 
 ### Integral Computation:
-- Compute 𝑦=𝑒<sup>-xsup>cos⁡(𝑥) and its derivative.
-- Calculate mean, variance, and standard deviation for a specified range.
+- Compute **𝑦=𝑒<sup>-x<sup>cos⁡(𝑥)** and its **derivative**.
+- Calculate **mean**, **variance**, and **standard deviation** for a specified range.
 - Plot results and find key thresholds.
 
 ### Linear Algebra Solver:
-- Solve systems of linear equations 𝐴𝑥=𝑏
+- **Solve** systems of linear equations **𝐴𝑥=𝑏**
 
 ### Least-Squares Regression:
-- Perform regression analysis with outputs for coefficients, 𝑡-statistics, and 𝑝-values.
+- **Perform regression analysis** with outputs for coefficients, 𝑡-statistics, and 𝑝-values.
 
 ## Requirements :
 - Python 3.6+
