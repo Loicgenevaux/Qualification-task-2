@@ -22,7 +22,6 @@ class TestTUStudent(unittest.TestCase):
         self.assertEqual(student.favourite, "Math")
 
     def test_study_program(self):
-        """Test that an invalid study program raises a ValueError."""
         with self.assertRaises(ValueError) as context:
             TUstudent(
                 name="David",
@@ -33,10 +32,9 @@ class TestTUStudent(unittest.TestCase):
                 courses=["Math", "Physics", "Programming", "AI", "Ethics"],
                 favourite="Math"
             )
-        self.assertEqual(str(context.exception), "study program invalid")
+        self.assertEqual(str(context.exception), "Study program invalid")
 
     def test_matricule(self):
-        """Test that an invalid matriculation number raises a ValueError."""
         with self.assertRaises(ValueError) as context:
             TUstudent(
                 name="David",
@@ -50,7 +48,6 @@ class TestTUStudent(unittest.TestCase):
         self.assertEqual(str(context.exception), "Matriculation number must be 7-digit")
 
     def test_courses(self):
-        """Test that less or more than 5 accomplished courses raise a ValueError."""
         with self.assertRaises(ValueError) as context:
             TUstudent(
                 name="David",
@@ -61,10 +58,9 @@ class TestTUStudent(unittest.TestCase):
                 courses=["Math", "Physics"],  # Not enough courses
                 favourite="Math"
             )
-        self.assertEqual(str(context.exception), "Minumum courses accomplished number should be 5")
+        self.assertEqual(str(context.exception), "Minimum courses accomplished number should be 5")
 
     def test_favourite_course(self):
-        """Test that a favorite course not in the accomplished courses raises a ValueError."""
         with self.assertRaises(ValueError) as context:
             TUstudent(
                 name="David",
@@ -75,7 +71,7 @@ class TestTUStudent(unittest.TestCase):
                 courses=["Math", "Physics", "Programming", "AI", "Ethics"],
                 favourite="InvalidCourse"
             )
-        self.assertEqual(str(context.exception), "Favourite courses have to be an accomplished courses")
+        self.assertEqual(str(context.exception), "Favourite courses have to be an accomplished course")
 
 
 if __name__ == "__main__":
