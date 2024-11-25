@@ -5,6 +5,9 @@ from scipy import stats
 
 
 class RobustDataScienceStudent(TUstudent):
+    def __init__(self,name, age, date, study_program, matricule, courses, favourite):
+        super().__init__(name, age, date, study_program, matricule, courses, favourite)
+
     @classmethod
     def integral_compute(cls, x, xstat, plot_derivative=False):
         try:
@@ -16,7 +19,6 @@ class RobustDataScienceStudent(TUstudent):
             x = np.linspace(x[0], x[1], 100)
             cls.y = np.exp(-x) * np.cos(x)
 
-            # Plot the function
             plt.figure(figsize=(10, 6))
             plt.plot(x, cls.y, label="y(x)")
             plt.title("Function y = e^(-x)cos(x)")
@@ -26,7 +28,6 @@ class RobustDataScienceStudent(TUstudent):
             plt.grid()
             plt.show()
 
-            # Compute statistics
             range_mask = (x >= xstat[0]) & (x <= xstat[1])
             ystat = cls.y[range_mask]
             mean = np.mean(ystat)
@@ -34,7 +35,6 @@ class RobustDataScienceStudent(TUstudent):
             std = np.std(ystat)
             threshold = np.percentile(ystat, 70)
 
-            # Compute derivative
             dy = np.gradient(cls.y, x)
             if plot_derivative:
                 plt.figure(figsize=(10, 6))
@@ -48,7 +48,6 @@ class RobustDataScienceStudent(TUstudent):
 
             zeros = np.argmin(np.abs(dy))
 
-            # Print results
             print(f"Mean of y between x={xstat}: {mean}")
             print(f"Variance of y between x={xstat}: {var}")
             print(f"Standard deviation of y between x={xstat}: {std}")
@@ -71,7 +70,6 @@ class RobustDataScienceStudent(TUstudent):
 
             x = np.linalg.solve(matrix, vector)
 
-            # Print results
             print("\nLinear System Solution:\n")
             print(f"System Matrix:\n{matrix}\n")
             print(f"Solution Vector:\n{vector}\n")
@@ -93,9 +91,9 @@ class RobustDataScienceStudent(TUstudent):
 
             beta, residuals = np.linalg.lstsq(X, y, rcond=None)[:2]
 
-            # Compute residuals and statistical values
+
             ym = X @ beta
-            residual = y - ym
+            residuals = y - ym
             n, k = X.shape
             residual_var = np.sum(residuals**2) / (n - k)
             XtX_inv = np.linalg.inv(X.T @ X)
@@ -115,19 +113,21 @@ class RobustDataScienceStudent(TUstudent):
         except Exception as error:
             print(f"Error when computing the function: {error}")
 
+def main():
+        x = []
+        y = []
+        rdss1 = RobustDataScienceStudent("David Dupond", 21, "11-11-2011", "Elektrotechnik und Informationstechnik", 1234567, ["e", "m", "p", "t", "h"], "e")
 
-# Main program
-x = []
-y = []
+        y = rdss1.integral_compute([0, 12], [4, 7], plot_derivative=True)
 
-rdss1 = RobustDataScienceStudent(
-    "David Dupond", 21, "11-11-2011", "Elektrotechnik und Informationstechnik", 1234567, ["e", "m", "p", "t", "h"], "e"
-)
+        A = np.array([[3, 2, 3, 10], [2, -2, 5, 8], [3, 3, 4, 9], [3, 4, -3, -7]])
+        b = np.array([4, 1, 3, 2])
+        X = rdss1.linear_algebra_compute(A, b)
 
-y = rdss1.integral_compute([0, 12], [4, 7], plot_derivative=True)
+        np.random.seed(0)
+        X_2 = np.random.rand(100, 3) 
+        y_2 = 1.5 * X_2[:, 0] - 2 * X_2[:, 1] + 0.5 * X_2[:, 2] + np.random.normal(0, 0.1, 100)
+        beta, t_stats, p_values = rdss1.least_squares(y_2, X_2, verbose=True)
 
-A = np.array([[3, 2, 3, 10], [2, -2, 5, 8], [3, 3, 4, 9], [3, 4, -3, -7]])
-b = np.array([4, 1, 3, 2])
-X = rdss1.linear_algebra_compute(A, b)
-
-rdss1.least_squares(y, X, verbose=True)
+if __name__ == "__main__":
+    main()
